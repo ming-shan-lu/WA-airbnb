@@ -11,7 +11,7 @@ duration of minimum stays etc.
 
 ## Method and results
 
-Tools: MYSQL & [Tableau](https://public.tableau.com/views/WA_airbnb/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link)
+Tools: [MYSQL](https://github.com/ming-shan-lu/WA-airbnb/blob/main/MYSQL) & [Tableau](https://public.tableau.com/views/WA_airbnb/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link)
  
 Results:
 
