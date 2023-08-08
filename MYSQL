@@ -1,6 +1,6 @@
-/* 1. How many total listing and how many hosts are there in WA?
+/* 1. How many total listings and how many hosts are there in WA?
  * 2. Do hosts rent out their entire home or just a room?
- * 3. Have hosts using airbnb as a platform for long-term rental to avoid regulations or accountability?
+ * 3. Have hosts used Airbnb as a platform for long-term rental to avoid regulations or accountability?
  * 4. Where are the most Airbnb Units in WA?
  */
 
@@ -8,11 +8,9 @@
 ## DATA PREPARATION ------------------------------------------------------------------
 # check for collect import of rows:11,507
 
-
 SELECT 
 Count(*)
 FROM airbnb_wa.`listings.csv` lc;
-
 
 # change datatypes
 
