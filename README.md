@@ -1,4 +1,4 @@
-#Airbnb in Western Australia - MYSQL & Tableau 
+# Airbnb in Western Australia - MYSQL & Tableau 
 
 In this project, I explore Airbnb in Western Australia listing data, focusing on understanding the Airbnb ecosystem in Western Australia. 
 
