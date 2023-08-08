@@ -4,11 +4,14 @@ In this project, I explore Airbnb in Western Australia listing data, focusing on
 
 ## Motivation
 
-I am interested in how Airbnb plays in WA housing. By cleaning and analysing the dataset, I hope it provides some insights.
+Airbnb has fundamentally changed how and where we travel. It arrived in Australia in 2012 and has brought with it a sequence of profound shifts
+in the hotel industry and housing rental market. I am interested in how Airbnb plays in WA because it is where I live. 
+By cleaning and analysing the dataset, I hope it provides some insights into the geographical distribution, property characteristics, price, and
+duration of minimum stays etc. 
 
 ## Method and results
 
-Tools: MYSQL & Tableau
+Tools: MYSQL & [Tableau](https://public.tableau.com/views/WA_airbnb/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link)
  
 Results: 83% are entire home/apt
 
@@ -16,8 +19,9 @@ Results: 83% are entire home/apt
       
          Most listing areas tourist-attractive regions: 
          
-         Busselton, Margaret, Stirling(Scarborough), Fremantle, Mandurah, Perth and Albany etc.
+         Busselton, Margaret, Stirling(Scarborough), Fremantle, Mandurah, Perth, Albany, etc.
                                                                                       
 
-
+### Data source
+[Inside Airbnb](http://insideairbnb.com/get-the-data)
 
