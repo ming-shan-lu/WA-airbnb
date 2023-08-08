@@ -15,6 +15,7 @@ Tools: MYSQL & [Tableau](https://public.tableau.com/views/WA_airbnb/Dashboard1?:
  
 Results:
 
+
          83% are entire home/apt
 
          98% are short-term listings (under 28 days)
