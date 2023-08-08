@@ -7,11 +7,11 @@
 
 ## DATA PREPARATION ------------------------------------------------------------------
 # check for collect import of rows:11,507
-```
+
 SELECT 
 Count(*)
 FROM airbnb_wa.`listings.csv` lc;
-```
+
 # change datatypes
 
 
