@@ -13,7 +13,9 @@ duration of minimum stays etc.
 
 Tools: MYSQL & [Tableau](https://public.tableau.com/views/WA_airbnb/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link)
  
-Results: 83% are entire home/apt
+Results:
+
+         83% are entire home/apt
 
          98% are short-term listings (under 28 days)
       
