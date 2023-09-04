@@ -11,9 +11,10 @@
 # Check for collect import of rows:11,507
 
 SELECT 
-Count(*)
+COUNT(*)
 FROM airbnb_wa.`listings.csv` lc ;
-# Check for duplicate: 11,507
+
+# Check for duplicates: NONE (rows:11,507)
 
 SELECT DISTINCT COUNT(*)
 FROM airbnb_wa.`listings.csv` lc;
@@ -31,7 +32,7 @@ WHERE last_review IS NOT NULL AND last_review !='';
 ##------------------------------------------------------------------------------------
 /* To determine inactive hosts, column 'availability_365' and 'number_of_reviews' both = 0
  * Active listing: 11415, 92 inactive  
- * (The folloing analysis will not exclude inactive listings)
+ * (The following analysis will not exclude inactive listings)
  */ 
 
 #  92 inactive  
@@ -85,7 +86,8 @@ FROM distinct_host
 WHERE total_listings >1;
 
 
-# There are 112 areas listing in WA 
+# There are 112 areas listed in WA 
+	
 SELECT 
 COUNT(DISTINCT neighbourhood) AS areas
 FROM airbnb_wa.`listings.csv` lc; 
@@ -103,8 +105,8 @@ GROUP BY neighbourhood
 ORDER BY no_listing DESC;
 
 ##-------------------------------------------------------------
-## ROOM TYPE :83% are entire home/apt, 16% private room
-# average price of room type
+## ROOM TYPE:83% are entire home/apt, 16% private room
+# Average price of room type
 
 SELECT 
 room_type,
@@ -115,7 +117,7 @@ FROM airbnb_wa.`listings.csv` lc
 GROUP BY room_type
 ORDER BY avg_price DESC;
 
-# Serviced apartments: funished rentals for long-term stays (no shared room)
+# Serviced apartments: furnished rentals for long-term stays (no shared room)
 
 SELECT 
 room_type,
@@ -124,7 +126,7 @@ FROM airbnb_wa.`listings.csv` lc
 WHERE name LIKE 'Serviced%'
 GROUP BY room_type;
 
-#average price of room type in suburbs: WAROONA top the average price of $1,516.97
+# Average price of room type in suburbs: WAROONA tops the average price of $1,516.97
 
 SELECT 
 neighbourhood AS suburb,
@@ -152,7 +154,7 @@ FROM airbnb_wa.`listings.csv` lc
 WHERE room_type = 'Entire Home/apt' AND neighbourhood = 'WAROONA'
 ORDER BY price DESC;
 
-# Hotel room price top 3 : BROOME $447, JOONDALUP: 327.2, FREMANTLE & CHITTERING $299
+# Hotel room price top 3: BROOME $447, JOONDALUP: 327.2, FREMANTLE & CHITTERING $299
 # 1 listing in Broome top the price of $447
 
 SELECT 
@@ -171,7 +173,7 @@ WHERE room_type = 'Hotel room'
   AND neighbourhood  = 'BROOME';
 
 # Private room price top 3: $298.42(AUGUSTA-Margaret Rive) $291.71(DERBY-West Kimberley) $286.57(DARDANUP)
-# host Michael in Augusta-Margaret River is a hotel and has a room cost $10,572
+# Host Michael in Augusta-Margaret River is a hotel and has a room cost of $10,572
 
  SELECT 
 neighbourhood AS suburb,
@@ -226,19 +228,19 @@ room_type,
 price,
 minimum_nights,
 (CASE 
-	WHEN minimum_nights BETWEEN 1 AND 7 THEN '1 week'
+    WHEN minimum_nights BETWEEN 1 AND 7 THEN '1 week'
     WHEN minimum_nights BETWEEN 8 AND 14 THEN '2 weeks'
     WHEN minimum_nights BETWEEN 15 AND 28 THEN '3-4 weeks'
     WHEN minimum_nights BETWEEN 30 AND 1000 THEN 'Over a month'
-	ELSE 'Unknown' 
+	 ELSE 'Unknown' 
 END) AS night_range,
 COUNT(minimum_nights) OVER(PARTITION BY 
 (CASE 
-	WHEN minimum_nights BETWEEN 1 AND 7 THEN '1 week'
-      WHEN minimum_nights BETWEEN 8 AND 14 THEN '2 weeks'
-      WHEN minimum_nights BETWEEN 15 AND 28 THEN '3-4 weeks'
-      WHEN minimum_nights BETWEEN 30 AND 1000 THEN 'Over a month'
-	ELSE 'Unknown' 
+    WHEN minimum_nights BETWEEN 1 AND 7 THEN '1 week'
+    WHEN minimum_nights BETWEEN 8 AND 14 THEN '2 weeks'
+    WHEN minimum_nights BETWEEN 15 AND 28 THEN '3-4 weeks'
+    WHEN minimum_nights BETWEEN 30 AND 1000 THEN 'Over a month'
+	 ELSE 'Unknown' 
 END) 
 ) AS night_range_sum
 FROM airbnb_wa.`listings.csv` lc;
@@ -269,8 +271,8 @@ FROM (
 GROUP BY night_range
 ORDER BY night_range;
 
-/* 149 listings hhve minimum stay of 30 days and above
- * room type: 85% Entired home/apt (126), 15% private/shared room (23)
+/* 149 listings have a minimum stay of 30 days and above
+ * Room type: 85% Entired home/apt (126), 15% private/shared room (23)
  */
 
 SELECT
