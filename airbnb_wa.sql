@@ -1,58 +1,51 @@
-/* 1. How many total listing are there in WA?
- * 2. Do hosts rent out their entire home or just a room?
- * 3. Have hosts using airbnb as a platform for long-term rental to avoid regulations or accountability?
+/* 1. How many total listings are there in WA?
  * 2. Where are the most Airbnb Units in WA?
- * 
+ * 3. Do hosts rent out their entire home or just a room?
+ * 4. Have hosts used Airbnb as a platform for long-term rental to avoid regulations or accountability?
  */
+  
 
 
 ## DATA PREPARATION ------------------------------------------------------------------
 
-# Check for collect import of rows:11,507
-
+-- Check for collect import of rows:11,507
 SELECT 
 COUNT(*)
 FROM airbnb_wa.`listings.csv` lc ;
 
-# Check for duplicates: NONE (rows:11,507)
-
+-- Check for duplicates: NONE (rows:11,507)
 SELECT DISTINCT COUNT(*)
 FROM airbnb_wa.`listings.csv` lc;
 
-# Change datatypes
-
+-- Change datatypes
 ALTER TABLE airbnb_wa.`listings.csv`  
 MODIFY COLUMN host_id varchar(200);
-
 
 UPDATE airbnb_wa.`listings.csv` 
 SET last_review = STR_TO_DATE(last_review, '%d/%m/%Y')
 WHERE last_review IS NOT NULL AND last_review !='';
 
-##------------------------------------------------------------------------------------
+##-----     1. How many total listings are there in WA?     --------------
 /* To determine inactive hosts, column 'availability_365' and 'number_of_reviews' both = 0
  * Active listing: 11415, 92 inactive  
- * (The following analysis will not exclude inactive listings)
+ * (The following analysis will not exclude inactive listings because it is less than 1% of the dataset. )
  */ 
 
-#  92 inactive  
-
+--  92 inactive  
 SELECT 
 COUNT(*) 
 FROM airbnb_wa.`listings.csv` lc 
 WHERE  (availability_365  = 0 AND number_of_reviews = 0);
 
 
-#  Active listing: 11,415
-
+--  Active listing: 11,415
 SELECT 
 COUNT(* )
 FROM airbnb_wa.`listings.csv` lc 
 WHERE NOT (availability_365  = 0 AND number_of_reviews = 0);
 
 
-# Total 6320 distinct hosts in WA
-
+-- Total 6320 distinct hosts in WA
 SELECT 
  COUNT(DISTINCT(host_id))
 FROM airbnb_wa.`listings.csv` lc;
@@ -86,12 +79,12 @@ FROM distinct_host
 WHERE total_listings >1;
 
 
-# There are 112 areas listed in WA 
-	
+-- There are 112 areas listed in WA --	
 SELECT 
 COUNT(DISTINCT neighbourhood) AS areas
 FROM airbnb_wa.`listings.csv` lc; 
 
+## -------    2. Where are the most Airbnb Units in WA?    ------------
 /*number of listings by area:
  * Busselton has the most listings of 1560,
  * then Augusta-Margaret River: 884 and Fremantle: 884 
@@ -104,9 +97,11 @@ FROM airbnb_wa.`listings.csv` lc
 GROUP BY neighbourhood
 ORDER BY no_listing DESC;
 
-##-------------------------------------------------------------
-## ROOM TYPE:83% are entire home/apt, 16% private room
-# Average price of room type
+## -------     3. Do hosts rent out their entire home or just a room?     ---------
+/* ROOM TYPE:83% are entire home/apt, 16% are private room
+ * Average price of room type: 
+ *	home/apt $289.56, Hotel room $ 210.7, Private room $ 141.93, Shared room $ 100.35
+ */
 
 SELECT 
 room_type,
@@ -117,8 +112,7 @@ FROM airbnb_wa.`listings.csv` lc
 GROUP BY room_type
 ORDER BY avg_price DESC;
 
-# Serviced apartments: furnished rentals for long-term stays (no shared room)
-
+-- Serviced apartments: furnished rentals for long-term stays (no shared room)
 SELECT 
 room_type,
 avg(price) AS avg_price_serviced_apt
@@ -126,8 +120,7 @@ FROM airbnb_wa.`listings.csv` lc
 WHERE name LIKE 'Serviced%'
 GROUP BY room_type;
 
-# Average price of room type in suburbs: WAROONA tops the average price of $1,516.97
-
+-- Average price of room type in the suburbs: WAROONA tops the average price of $1,516.97
 SELECT 
 neighbourhood AS suburb,
 room_type,
@@ -137,8 +130,7 @@ GROUP by neighbourhood, room_type
 -- Having room_type = 'Entire Home/apt'
 ORDER BY avg_price DESC;
 
-# Entire Home/apt: Waroona has 4 listings of Entire Home/apt price $10,000 (Camper/RV in Lake Clifton)
-
+-- Entire Home/apt: Waroona has four listings of Entire Home/apt price $10,000 (Camper/RV in Lake Clifton)
 SELECT 
 neighbourhood AS suburb,
 room_type,
@@ -154,9 +146,9 @@ FROM airbnb_wa.`listings.csv` lc
 WHERE room_type = 'Entire Home/apt' AND neighbourhood = 'WAROONA'
 ORDER BY price DESC;
 
-# Hotel room price top 3: BROOME $447, JOONDALUP: 327.2, FREMANTLE & CHITTERING $299
-# 1 listing in Broome top the price of $447
 
+-- Hotel room price top 3: BROOME $447, JOONDALUP: 327.2, FREMANTLE & CHITTERING $299
+-- 1 listing in Broome top the price of $447
 SELECT 
 neighbourhood AS suburb,
 room_type,
@@ -172,10 +164,10 @@ FROM airbnb_wa.`listings.csv` lc
 WHERE room_type = 'Hotel room'
   AND neighbourhood  = 'BROOME';
 
-# Private room price top 3: $298.42(AUGUSTA-Margaret Rive) $291.71(DERBY-West Kimberley) $286.57(DARDANUP)
-# Host Michael in Augusta-Margaret River is a hotel and has a room cost of $10,572
 
- SELECT 
+-- Private room price top 3: $298.42(AUGUSTA-Margaret Rive) $291.71(DERBY-West Kimberley) $286.57(DARDANUP)
+-- Host Michael in Augusta-Margaret River is a hotel and has a room cost of $10,572
+SELECT 
 neighbourhood AS suburb,
 room_type,
 ROUND(Avg(price),2) AS avg_price
@@ -192,16 +184,16 @@ WHERE room_type = 'Private room'
   AND host_id = 519965361
 ORDER BY price DESC;
 
-# if omit the listing of $10,572, avg_rpice = $263.36
+-- If omit the listing of $10,572, avg_rpice = $263.36
 SELECT 
  AVG(CASE WHEN latitude = -33.97177382 AND longitude = 115.0988653 THEN NULL 
       ELSE price 
       END) AS avg_price
 FROM airbnb_wa.`listings.csv` lc
- 
-# Shared room Top 3: $999(CHITTERING) $137(ROCKINGHAM) $110(BUSSELTON)
-#  Chittering 1 listing of shared room costed $999
 
+	
+-- Shared room Top 3: $999(CHITTERING) $137(ROCKINGHAM) $110(BUSSELTON)
+--  Chittering 1 listing of shared room cost $999
 SELECT 
 neighbourhood AS suburb,
 room_type,
@@ -217,8 +209,8 @@ FROM airbnb_wa.`listings.csv` lc
 WHERE room_type = 'Shared room' AND neighbourhood = 'CHITTERING'  
 ORDER BY price DESC;
 
-##----------------------------------------------------------------------------------
-# minimum night stay of 1 week: 97%, and over a month : 1%
+##---  4. Have hosts used Airbnb as a platform for long-term rental to avoid regulations or accountability?  ------
+--  minimum night stay of 1 week: 97%, and over a month: 1%
 
 SELECT 
 host_id,
@@ -272,7 +264,7 @@ GROUP BY night_range
 ORDER BY night_range;
 
 /* 149 listings have a minimum stay of 30 days and above
- * Room type: 85% Entired home/apt (126), 15% private/shared room (23)
+ * Room type: 85% Entire home/apt (126), 15% private/shared room (23)
  */
 
 SELECT
