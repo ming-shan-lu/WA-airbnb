@@ -13,17 +13,12 @@ SELECT
 Count(*)
 FROM airbnb_wa.listings l ;
 
-# Check for number of columns: 18
+# Check for numbers of columns: 18
 
 SELECT COUNT(column_name) 
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE TABLE_SCHEMA = 'airbnb_wa'
   AND TABLE_NAME = 'listings'
-
-# Check for duplicate: 11,507
-
-SELECT DISTINCT COUNT(*)
-FROM airbnb_wa.listings l;
 
 # Change datatypes
 
