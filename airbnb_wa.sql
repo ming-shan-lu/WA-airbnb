@@ -102,23 +102,63 @@ WHERE total_listings >1;
 
 ## -------    2. Which areas have the most Airbnb Units in WA and what is the price range ?   ------------
 
-# There are 112 areas listing in WA 
+# There are 112 areas listed in WA 
 
 SELECT 
 COUNT(DISTINCT neighbourhood) AS areas
 FROM airbnb_wa.listings; 
 
 /*number of listings by area:
- * Busselton has the most listings of 1560,
- * then Augusta-Margaret River: 884 and Fremantle: 884 
+ * Top 5: Busselton, Augusta-Margaret River, Stirling, Fremantle, Mandurah   
+ * total listings of top 5 neighbourhoods: 4,175
+ * percentage of top 5 neighbourhoods: 36.28%
+ * percentage of top 10 neighbourhoods: 51.03%
  */
 
 SELECT 
  neighbourhood,
- COUNT(*) AS num_listing
-FROM airbnb_wa.listings 
+ COUNT(*) AS no_listing
+FROM airbnb_wa.listings l 
 GROUP BY neighbourhood
-ORDER BY num_listing DESC;
+ORDER BY no_listing DESC;
+
+## Total listings of top 5 neighbourhoods: 4,175 
+
+SELECT 
+ SUM(no_listing) AS total_top_5_listings
+FROM
+	(SELECT 
+	 neighbourhood,
+	 COUNT(*) AS no_listing
+	FROM airbnb_wa.listings l 
+	GROUP BY neighbourhood
+	ORDER BY no_listing DESC
+	Limit 5) AS listing_counts;
+
+## Percentage of top 5 neighbourhoods of total listings: 36.28%
+
+SELECT 
+ SUM(percentage_of_total) AS top_5_area
+FROM
+(SELECT 
+    neighbourhood,
+    COUNT(*) AS no_listing,
+    ROUND(COUNT(*) * 100 / total_listings, 2) AS percentage_of_total
+FROM 
+    airbnb_wa.listings l 
+CROSS JOIN 
+    (
+    SELECT 
+        COUNT(*) AS total_listings
+    FROM 
+        airbnb_wa.listings
+    ) AS total_counts
+GROUP BY 
+    neighbourhood, total_listings
+ORDER BY 
+    no_listing DESC
+LIMIT 5) AS sub;
+
 
 
 # average price: $ 264
@@ -203,7 +243,7 @@ WHERE room_type = 'Hotel room'
   AND neighbourhood  = 'BROOME';
 
 # Private room price top 3: $298.42(AUGUSTA-Margaret Rive) $291.71(DERBY-West Kimberley) $286.57(DARDANUP)
-# host Michael in Augusta-Margaret River is a hotel and has a room cost $10,572
+# Host Michael in Augusta-Margaret River is a hotel and has a room cost of $10,572
 
  SELECT 
 neighbourhood AS suburb,
@@ -232,7 +272,7 @@ GROUP by neighbourhood, room_type
 Having room_type = 'Private room'
 ORDER BY avg_price DESC;
 
-# if omit the listing of $10,572, avg_rpice = $263.36
+# If omit the listing of $10,572, avg_rpice = $263.36
 SELECT 
  AVG(CASE WHEN latitude = -33.97177382 AND longitude = 115.0988653 THEN NULL 
       ELSE price 
