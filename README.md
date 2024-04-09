@@ -26,5 +26,6 @@ Results:
                                                                                       
 
 ### Data source
+[Kaggle] (https://www.kaggle.com/datasets/mingslu/airbnb-wa)
 [Inside Airbnb](http://insideairbnb.com/get-the-data)
 
